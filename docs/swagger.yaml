@@ -1,0 +1,102 @@
+basePath: /api
+definitions:
+  models.Order:
+    properties:
+      order_id:
+        type: string
+      user_id:
+        type: string
+      item_ids:
+        items:
+          type: integer
+        type: array
+      total_amount:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@pskart.com
+    name: API Support
+    url: http://www.pskart.com/support
+  description: This is a sample server for PSKart.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://pskart.com/terms/
+  title: PSKart API
+  version: "1.0"
+paths:
+  /order:
+    get:
+      description: Get the metrics of orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: integer
+            type: object
+      summary: Get order metrics
+      tags:
+      - orders
+  /order/{orderId}:
+    get:
+      description: Get the status of an order by its ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get order status
+      tags:
+      - orders
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Create a new order and send it to the order channel
+      parameters:
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new order
+      tags:
+      - orders
+swagger: "2.0"
