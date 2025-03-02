@@ -35,9 +35,11 @@ func main() {
 		TimeZone:   "Local",
 	}))
 
+	// CORS configuration
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
+		AllowOrigins: "*", // Allow all origins
 		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowMethods: "GET, POST, PUT, DELETE, OPTIONS",
 	}))
 
 	orderChan := make(chan models.Order, 100)
@@ -45,7 +47,7 @@ func main() {
 	go handlers.ProcessOrders(orderChan, db)
 
 	api := app.Group("/api")
-	//initating swagger
+	// Initiating swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	// Routes
