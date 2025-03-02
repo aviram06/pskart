@@ -12,7 +12,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/swagger"
-	"github.com/joho/godotenv"
 )
 
 // @title PSKart API
@@ -22,10 +21,6 @@ import (
 // @BasePath /api
 func main() {
 	// Connect to database
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
@@ -50,14 +45,14 @@ func main() {
 	go handlers.ProcessOrders(orderChan, db)
 
 	api := app.Group("/api")
-
+	//initating swagger
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	// Routes
 	api.Post("/order", func(c *fiber.Ctx) error {
 		return handlers.CreateOrder(c, orderChan)
 	})
-	api.Get("/orders", handlers.GetMetrics)
+	api.Get("/ordersnv", handlers.GetMetrics)
 	api.Get("/order/:orderId", handlers.GetOrderStatus)
 
 	port := os.Getenv("PORT")
