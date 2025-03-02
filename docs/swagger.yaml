@@ -2,44 +2,52 @@ basePath: /api
 definitions:
   models.Order:
     properties:
-      order_id:
-        type: string
-      user_id:
-        type: string
       item_ids:
         items:
           type: integer
         type: array
+      order_id:
+        type: string
       total_amount:
         type: number
+      user_id:
+        type: string
     type: object
 host: localhost:8080
 info:
-  contact:
-    email: support@pskart.com
-    name: API Support
-    url: http://www.pskart.com/support
+  contact: {}
   description: This is a sample server for PSKart.
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-  termsOfService: http://pskart.com/terms/
   title: PSKart API
   version: "1.0"
 paths:
   /order:
-    get:
-      description: Get the metrics of orders
+    post:
+      consumes:
+      - application/json
+      description: Create a new order and send it to the order channel
+      parameters:
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "202":
+          description: Accepted
           schema:
             additionalProperties:
-              type: integer
+              type: string
             type: object
-      summary: Get order metrics
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new order
       tags:
       - orders
   /order/{orderId}:
@@ -70,33 +78,18 @@ paths:
       tags:
       - orders
   /orders:
-    post:
-      consumes:
-      - application/json
-      description: Create a new order and send it to the order channel
-      parameters:
-      - description: Order
-        in: body
-        name: order
-        required: true
-        schema:
-          $ref: '#/definitions/models.Order'
+    get:
+      description: Get the metrics of orders
       produces:
       - application/json
       responses:
-        "202":
-          description: Accepted
+        "200":
+          description: OK
           schema:
             additionalProperties:
-              type: string
+              type: integer
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Create a new order
+      summary: Get order metrics
       tags:
       - orders
 swagger: "2.0"

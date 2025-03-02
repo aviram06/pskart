@@ -18,15 +18,6 @@ import (
 // @title PSKart API
 // @version 1.0
 // @description This is a sample server for PSKart.
-// @termsOfService http://pskart.com/terms/
-
-// @contact.name API Support
-// @contact.url http://www.pskart.com/support
-// @contact.email support@pskart.com
-
-// @license.name MIT
-// @license.url https://opensource.org/licenses/MIT
-
 // @host localhost:8080
 // @BasePath /api
 func main() {
@@ -63,10 +54,10 @@ func main() {
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	// Routes
-	api.Post("/orders", func(c *fiber.Ctx) error {
+	api.Post("/order", func(c *fiber.Ctx) error {
 		return handlers.CreateOrder(c, orderChan)
 	})
-	api.Get("/order", handlers.GetMetrics)
+	api.Get("/orders", handlers.GetMetrics)
 	api.Get("/order/:orderId", handlers.GetOrderStatus)
 
 	port := os.Getenv("PORT")

@@ -13,7 +13,7 @@ import (
 var (
 	orderQueue = make(map[string]string)
 	queueMutex = sync.RWMutex{}
-	metrics    = map[string]int{`json:"pending"`: 0, `json:"processing"`: 0, `json:"completed"`: 0}
+	metrics    = map[string]int{"pending": 0, "processing": 0, "completed": 0}
 )
 
 func ProcessOrders(orderChan chan models.Order, db *sql.DB) {
@@ -44,7 +44,7 @@ func ProcessOrders(orderChan chan models.Order, db *sql.DB) {
 // @Param order body models.Order true "Order"
 // @Success 202 {object} map[string]string
 // @Failure 400 {object} map[string]string
-// @Router /orders [post]
+// @Router /order [post]
 func CreateOrder(c *fiber.Ctx, orderChan chan models.Order) error {
 	var order models.Order
 	if err := c.BodyParser(&order); err != nil {
@@ -86,7 +86,7 @@ func GetOrderStatus(c *fiber.Ctx) error {
 // @Tags orders
 // @Produce json
 // @Success 200 {object} map[string]int
-// @Router /order [get]
+// @Router /orders [get]
 func GetMetrics(c *fiber.Ctx) error {
 	queueMutex.Lock()
 	defer queueMutex.Unlock()
